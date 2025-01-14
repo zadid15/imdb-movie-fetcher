@@ -65,77 +65,79 @@
 
 // Fetch Refactory
 const searchButton = document.querySelector('.search-button');
-searchButton.addEventListener('click', async function(){
-    try{
+searchButton.addEventListener('click', async function () {
+    try {
         const inputKeyword = document.querySelector('.input-keyword');
         const movies = await getMovies(inputKeyword.value);
-        updateUI(movies)
-    } catch (err){
+        updateUI(movies);
+    } catch (err) {
         alert(err);
     }
 });
 
-function getMovies(keyword){
-    return fetch('http://www.omdbapi.com/?apikey=641688c2&s=' + keyword)
+function getMovies(keyword) {
+    return fetch('https://www.omdbapi.com/?apikey=641688c2&s=' + keyword)
         .then(response => {
-            if( !response.ok ){
+            if (!response.ok) {
                 throw new Error(response.status);
             }
             return response.json();
         })
-        .then( response => {
-            if( response.Response === "False" ){
+        .then(response => {
+            if (response.Response === "False") {
                 throw new Error(response.Error);
             }
             return response.Search;
         });
 }
 
-
-function updateUI(movies){
+function updateUI(movies) {
     let cards = '';
-    movies.forEach( m => cards += showCards(m));
+    movies.forEach(m => cards += showCards(m));
     const moviesContainer = document.querySelector('.movie-container');
     moviesContainer.innerHTML = cards;
 }
 
-// Ketika tombol detail di-klik
-// Event binding
-document.addEventListener('click', async function(e){
-    if( e.target.classList.contains('modal-detail-button')){
+// Event binding untuk tombol detail
+document.addEventListener('click', async function (e) {
+    if (e.target.classList.contains('modal-detail-button')) {
         const imdbid = e.target.dataset.imdbid;
-        const movieDetail =  await getMovieDetail(imdbid);
+        const movieDetail = await getMovieDetail(imdbid);
         updateUIDetail(movieDetail);
     }
-})
+});
 
-function getMovieDetail(imdbid){
-    return fetch('http://www.omdbapi.com/?apikey=641688c2&i=' + imdbid)
-                .then( response => response.json())
-                .then( m => m );
+function getMovieDetail(imdbid) {
+    return fetch('https://www.omdbapi.com/?apikey=641688c2&i=' + imdbid)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(response.status);
+            }
+            return response.json();
+        });
 }
 
-function updateUIDetail(m){
+function updateUIDetail(m) {
     const movieDetail = showMovieDetail(m);
     const modalBody = document.querySelector('.modal-body');
-    modalBody.innerHTML = movieDetail;                    
+    modalBody.innerHTML = movieDetail;
 }
 
-function showCards(m){
+function showCards(m) {
     return `<div class="col-md-4 my-3">
                 <div class="card">
                     <img src="${m.Poster}" class="card-img-top">
                     <div class="card-body">
-                    <h5 class="card-title">${m.Title}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">${m.Year}</h6>
-                    <a href="#" class="btn btn-primary modal-detail-button" data-toggle="modal" 
-                    data-target="#movieDetailModal" data-imdbid="${m.imdbID}">Show Details</a>
+                        <h5 class="card-title">${m.Title}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">${m.Year}</h6>
+                        <a href="#" class="btn btn-primary modal-detail-button" data-toggle="modal" 
+                        data-target="#movieDetailModal" data-imdbid="${m.imdbID}">Show Details</a>
                     </div>
                 </div>
-            </div>`
-};
+            </div>`;
+}
 
-function showMovieDetail(m){
+function showMovieDetail(m) {
     return `<div class="container-fluid">
                 <div class="row">
                     <div class="col-md-3">
@@ -151,5 +153,5 @@ function showMovieDetail(m){
                         </ul>
                     </div>
                 </div>
-            </div>`
-};
+            </div>`;
+}
