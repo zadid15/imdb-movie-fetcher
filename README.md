@@ -22,6 +22,9 @@
    git clone https://github.com/yourusername/imdb-movie-fetcher.git
 2. Open index.html in your browser.
 
-Usage
+## Usage
 - Simply type a movie name in the search bar and hit Enter.
 - The app will fetch relevant movie data from IMDb and display it.
+
+## Live Demo
+Try it out here: [IMDb Movie Fetcher](https://imdb-movie-fetcher.vercel.app)
